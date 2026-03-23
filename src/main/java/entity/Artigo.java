@@ -4,23 +4,24 @@ public class Artigo {
 
     private Long id;
     private String nome;
-    private Categoria id_categoria;
-    private Usuario id_usuario;
+//    private int id_categoria;
+//    private int id_usuario;
     private String criacao;
+    private String wikitexto;
 
-    public Artigo(Long id, String nome, Categoria id_categoria, Usuario id_usuario, String criacao) {
+    public Artigo(Long id, String nome, String wikitexto) {
         this.id = id;
         this.nome = nome;
-        this.id_categoria = id_categoria;
-        this.id_usuario = id_usuario;
-        this.criacao = criacao;
+//        this.id_categoria = id_categoria;
+//        this.id_usuario = id_usuario;
+        this.wikitexto = wikitexto;
     }
 
-    public Artigo(String nome, Categoria id_categoria, Usuario id_usuario, String criacao) {
+    public Artigo(String nome, String wikitexto) {
         this.nome = nome;
-        this.id_categoria = id_categoria;
-        this.id_usuario = id_usuario;
-        this.criacao = criacao;
+//        this.id_categoria = id_categoria;
+//        this.id_usuario = id_usuario;
+        this.wikitexto = wikitexto;
     }
 
     public Long getId() {
@@ -31,15 +32,11 @@ public class Artigo {
         return nome;
     }
 
-    public Categoria getId_categoria() {
-        return id_categoria;
-    }
-
-    public Usuario getId_usuario() {
-        return id_usuario;
-    }
-
     public String getCriacao() {
         return criacao;
+    }
+
+    public String getWikitexto(){
+        return wikitexto;
     }
 }

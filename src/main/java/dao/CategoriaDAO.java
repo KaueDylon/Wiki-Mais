@@ -21,4 +21,30 @@ public class CategoriaDAO extends BaseDAO {
         }
     }
 
+    public List<Categoria> listarCategorias(){
+        List<Categoria> listaCategorias = new ArrayList<>();
+        String qry = "SELECT id_categoria, nome_categoria FROM categoria";
+
+        try(Connection conn = conn();
+            PreparedStatement pre = conn().prepareStatement(qry)){
+
+            ResultSet resultadoQry = pre.executeQuery();
+
+
+            while (resultadoQry.next()){
+                Long id = resultadoQry.getLong("id_categoria");
+                String nome = resultadoQry.getString("nome_categoria");
+
+                Categoria categoria = new Categoria(id,nome);
+                listaCategorias.add(categoria);
+            }
+
+        }catch (SQLException e){
+            System.out.println("Erro ao cadastrar categoria: "+e.getMessage());
+        }
+
+        return listaCategorias;
+
+    }
+
 }
