@@ -46,6 +46,7 @@ create table artigo(
 	id_usuario INT not null,
 	nome_artigo VARCHAR(225) not null,
 	criacao_artigo TIMESTAMPTZ DEFAULT NOW(),
+    wikitexto_artigo TEXT,
 	
 	foreign key (id_categoria) references categoria(id_categoria),
 	foreign key (id_usuario) references usuario(id_usuario)
