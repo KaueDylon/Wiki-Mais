@@ -16,6 +16,12 @@ public class CategoriaDAO extends BaseDAO {
 
             pre.setString(1,categoria.getNome());
 
+            if(categoria.getNome().isEmpty()){
+                throw new IllegalArgumentException("O nome da categoria não pode ser vazia.");
+            }
+
+            pre.execute();
+
         }catch (SQLException e){
             System.out.println("Erro ao cadastrar categoria: "+e.getMessage());
         }

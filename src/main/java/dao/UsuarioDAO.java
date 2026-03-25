@@ -18,11 +18,25 @@ public class UsuarioDAO extends BaseDAO {
              PreparedStatement pre = conn.prepareStatement(qry);
         ) {
 
+            if(usuario.getNome().isEmpty()){
+                throw new IllegalArgumentException("O nome do usuário não pode ser vazio.");
+            }
+
             pre.setInt(1, 1);
             pre.setString(2, usuario.getNome());
-            pre.setString(3, usuario.getEmail());
-            pre.setString(4, usuario.getSenha());
 
+            if(usuario.getEmail().isEmpty()){
+                throw new IllegalArgumentException("O email do usuário não pode ser vazio.");
+            }
+
+            pre.setString(3, usuario.getEmail());
+
+
+            if(usuario.getSenha().isEmpty()){
+                throw new IllegalArgumentException("A senha do usuário não pode ser vazia.");
+            }
+
+            pre.setString(4, usuario.getSenha());
             pre.execute();
 
         } catch (SQLException e) {
