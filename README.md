@@ -9,6 +9,12 @@
  
 Um gerenciador de wikis e artigos em Java, feito com o intuito de praticar o uso da Programação Orientada à Objetos e Banco de Dados com JDBC.
 
+- [x] Criação de Artigos;
+- [x] Edição de Artigos;
+- [x] Login e Logout;
+- [x] Poderes de Admin (apagar artigos, banir usuários).
+
+
 ---
 
 
