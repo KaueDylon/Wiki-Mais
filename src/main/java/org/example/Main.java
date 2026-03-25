@@ -7,9 +7,6 @@ import entity.Artigo;
 import entity.Categoria;
 import entity.Usuario;
 
-import javax.sound.midi.Soundbank;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -118,7 +115,7 @@ public class Main {
 
         switch (opcao) {
             case 1:
-                telaBuscarArtigo();
+                telaBuscarArtigo(usuario);
                 break;
             case 2:
                 telaCriarArtigo(usuario);
@@ -131,16 +128,42 @@ public class Main {
 
     }
 
-    public static void telaBuscarArtigo() { // ARRUMAR
+    public static void telaBuscarArtigo(Usuario usuario) { // misericordia
         System.out.println("+---------------------+");
         System.out.println("|     FAZER BUSCA     |");
         System.out.println("+---------------------+");
 
-        ArtigoDAO artigoDAODAO = new ArtigoDAO();
-        List<Artigo> listarArtigo = artigoDAO.listarCategorias();
-//        for (Categoria  : listarCategorias) {
-//            System.out.println(categ.getId() + ") " + categ.getNome());
-//        }
+        ArtigoDAO artigoDAO = new ArtigoDAO();
+        List<Artigo> listaArtigo = artigoDAO.listarArtigo();
+        for (Artigo art : listaArtigo) {
+            System.out.println("");
+            System.out.println("(" + art.getId() + ") | Artigo: " + art.getNome());
+            System.out.println("Criado em " + art.getCriacao() + " por " + art.getNomeUsuario());
+            System.out.println("-".repeat(24));
+        }
+
+        System.out.println("Digite o ID do artigo que deseja:");
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+
+        Artigo artigo = artigoDAO.listarArtigoID(opcao);
+        System.out.println("");
+        System.out.println("Artigo: " + artigo.getNome());
+        System.out.println(artigo.getWikitexto());
+        System.out.println("-".repeat(24));
+
+        System.out.println("Você deseja:");
+        System.out.println("=== (1) INICIO - (2) ARTIGOS ===");
+        System.out.println(" === (QUALQUER TECLA) SAIR ===");
+        opcao = scanner.nextInt();
+        scanner.nextLine();
+        if (opcao == 1) {
+            telaOpcaoArtigos(usuario);
+        } else if (opcao == 2) {
+            telaBuscarArtigo(usuario);
+        } else {
+            telaSair();
+        }
 
     }
 

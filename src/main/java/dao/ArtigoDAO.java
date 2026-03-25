@@ -6,6 +6,7 @@ import entity.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +24,15 @@ public class ArtigoDAO extends BaseDAO {
         ) {
 
             pre.setInt(1, categoria);
-            pre.setInt(2,usuario.getId());
+            pre.setInt(2, usuario.getId());
 
-            if(artigo.getNome().isEmpty()){
+            if (artigo.getNome().isEmpty()) {
                 throw new IllegalArgumentException("O nome do artigo não pode ser vazio.");
             }
 
             pre.setString(3, artigo.getNome());
 
-            if(artigo.getWikitexto().isEmpty()){
+            if (artigo.getWikitexto().isEmpty()) {
                 throw new IllegalArgumentException("O Wikitexto não pode ser vazio.");
             }
 
@@ -44,12 +45,72 @@ public class ArtigoDAO extends BaseDAO {
         }
     }
 
-    public void consultarArtigo(){
+    public List<Artigo> listarArtigo() {
 
-        List<Categoria> listaCategorias = new ArrayList<>();
-        String qry = "SELECT id_categoria, nome_categoria FROM categoria";
+        List<Artigo> listaArtigos = new ArrayList<>();
+        String qry = "SELECT art.id_artigo, art.id_categoria, art.nome_artigo, " +
+                "to_char(criacao_artigo, 'DD/MM/YYYY') as criacao_artigo_format, " +
+                "art.wikitexto_artigo, usu.nome_usuario, cat.nome_categoria " +
+                "FROM artigo art " +
+                "left join usuario usu ON art.id_usuario  = usu.id_usuario "+
+                "left join categoria cat on art.id_categoria = cat.id_categoria ";
+
+        try (Connection conn = conn();
+             PreparedStatement pre = conn().prepareStatement(qry)) {
+
+            ResultSet resultadoQry = pre.executeQuery();
+
+            while (resultadoQry.next()) {
+                Long idArtigo = resultadoQry.getLong("id_artigo");
+                String nomeArtigo = resultadoQry.getString("nome_artigo");
+                String criacaoArtigo = resultadoQry.getString("criacao_artigo_format");
+                String nomeUsuario = resultadoQry.getString("nome_usuario");
+                String nomeCategoria = resultadoQry.getString("nome_categoria");
+                String textoArtigo = resultadoQry.getString("wikitexto_artigo");
+
+                Artigo artigoTemp = new Artigo(idArtigo,nomeArtigo,textoArtigo,
+                                    nomeUsuario,nomeCategoria,criacaoArtigo);
+
+                listaArtigos.add(artigoTemp);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar artigos: " + e.getMessage());
+        }
+
+        return listaArtigos;
+    }
+
+    public Artigo listarArtigoID(int id) {
+
+        String qry = "SELECT art.nome_artigo, art.wikitexto_artigo " +
+                     "FROM artigo art where art.id_artigo = ?";
+
+        Artigo artigoTemp = null;
+        try (Connection conn = conn();
+             PreparedStatement pre = conn().prepareStatement(qry)) {
+
+            if (id < 0) {
+                throw new IllegalArgumentException("O ID do artigo não pode ser vazio.");
+            }
+
+            pre.setInt(1, id);
+
+            ResultSet resultadoQry = pre.executeQuery();
+
+            if(resultadoQry.next()){
+                String nomeArtigo = resultadoQry.getString("nome_artigo");
+                String textoArtigo = resultadoQry.getString("wikitexto_artigo");
+
+                artigoTemp = new Artigo(nomeArtigo, textoArtigo);
+            }
 
 
+        } catch (SQLException e) {
+            System.out.println("Erro ao exibir artigo: " + e.getMessage());
+        }
+
+        return artigoTemp;
     }
 }
 
