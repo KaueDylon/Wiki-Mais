@@ -49,6 +49,7 @@ public class ArtigoDAO extends BaseDAO {
         List<Categoria> listaCategorias = new ArrayList<>();
         String qry = "SELECT id_categoria, nome_categoria FROM categoria";
 
+
     }
 }
 
