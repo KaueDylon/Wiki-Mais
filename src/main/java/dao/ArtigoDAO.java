@@ -112,6 +112,55 @@ public class ArtigoDAO extends BaseDAO {
 
         return artigoTemp;
     }
+
+    public void editarArtigo(int id, String wikiTextoEdt){
+
+       String qry = "UPDATE artigo SET wikitexto_artigo = ? where id_artigo = ?";
+
+        try(Connection conn = conn();
+            PreparedStatement pre = conn().prepareStatement(qry)){
+
+            if (id < 0) {
+                throw new IllegalArgumentException("O ID do artigo não pode ser vazio.");
+            }
+
+            pre.setString(1, wikiTextoEdt);
+
+            pre.setInt(2, id);
+
+            if (wikiTextoEdt.isEmpty()) {
+                throw new IllegalArgumentException("O WikiTexto do artigo não pode ser vazio.");
+            }
+
+            pre.execute();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao editar artigo: " + e.getMessage());
+        }
+
+    }
+
+    // apenas ao adm
+    public void deletarArtigo(int id){
+        String qry = "DELETE FROM artigo WHERE id_artigo = ?";
+
+        try(Connection conn = conn();
+            PreparedStatement pre = conn().prepareStatement(qry)){
+
+            if (id < 0) {
+                throw new IllegalArgumentException("O ID do artigo não pode ser vazio.");
+            }
+
+            pre.setInt(1, id);
+
+            int linhasDeletadas = pre.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao deletar artigo: " + e.getMessage());
+        }
+
+
+    }
 }
 
 

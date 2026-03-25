@@ -1,6 +1,7 @@
 package org.example;
 
 import dao.ArtigoDAO;
+import dao.CargoDAO;
 import dao.CategoriaDAO;
 import dao.UsuarioDAO;
 import entity.Artigo;
@@ -108,6 +109,11 @@ public class Main {
         System.out.println("|    artigo           |");
         System.out.println("| 2) Criar um         |");
         System.out.println("|    novo artigo      |");
+        System.out.println("| 3) Editar um        |");
+        System.out.println("|    artigo           |");
+        if (usuario.getId() == 2) {
+            System.out.println("| 4) ADMIN            |");
+        }
         System.out.println("+---------------------+");
 
         int opcao = scanner.nextInt();
@@ -119,6 +125,16 @@ public class Main {
                 break;
             case 2:
                 telaCriarArtigo(usuario);
+                break;
+            case 3:
+                telaEditarArtigo(usuario);
+                break;
+            case 4:
+                if (usuario.getId() != 2) {
+                    telaOpcaoArtigos(usuario);
+                    break;
+                }
+                telaAdmin(usuario);
                 break;
             default:
                 System.out.println("Opção inválida. Tente novamente.");
@@ -221,6 +237,122 @@ public class Main {
         System.out.println("Categoria criada com sucesso.");
         telaCriarArtigo(usuario);
 
+    }
+
+    public static void telaAdmin(Usuario usuario) {
+
+        System.out.println("+---------------------+");
+        System.out.println("|    ADMINISTRAÇÃO    |");
+        System.out.println("+---------------------+");
+        System.out.println("|     = OPÇÕES: =     |");
+        System.out.println("|                     |");
+        System.out.println("| 1) Deletar um       |");
+        System.out.println("|    artigo           |");
+        System.out.println("| 2) Banir/Desbanir   |");
+        System.out.println("|    um usuário       |");
+        System.out.println("| 3) Sair             |");
+        System.out.println("+---------------------+");
+
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (opcao) {
+            case 1:
+                telaDeletarArtigo(usuario);
+                break;
+            case 2:
+                telaBanimentosUsuario(usuario);
+                break;
+            case 3:
+                telaSair();
+                break;
+            default:
+                System.out.println("Opção inválida. Tente novamente.");
+                telaAdmin(usuario);
+                break;
+        }
+    }
+
+    public static void telaBanimentosUsuario(Usuario usuario) {
+        System.out.println("+---------------------+");
+        System.out.println("|      BANIMENTOS     |");
+        System.out.println("+---------------------+");
+
+        System.out.println("Deseja banir ou desbanir?");
+        System.out.println("=== (1) BANIR - (2) DESBANIR ===");
+
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+
+        if (opcao == 1) {
+            System.out.println("Insira o ID do usuário ");
+            System.out.print("que será banido: ");
+
+            int id = scanner.nextInt();
+            scanner.nextLine();
+
+            CargoDAO cargoDAO = new CargoDAO();
+            cargoDAO.banirUsuario(id);
+            System.out.println("Banimento concluído.");
+            telaAdmin(usuario);
+
+        } else if (opcao == 2) {
+            System.out.println("Insira o ID do usuário ");
+            System.out.print("que será desbanido: ");
+
+            int id = scanner.nextInt();
+            scanner.nextLine();
+
+            CargoDAO cargoDAO = new CargoDAO();
+            cargoDAO.desbanirUsuario(id);
+            System.out.println("Desbanimento concluído.");
+            telaAdmin(usuario);
+        } else {
+            System.out.println("Opção inválida.");
+            telaBanimentosUsuario(usuario);
+        }
+
+    }
+
+    public static void telaDeletarArtigo(Usuario usuario) {
+        System.out.println("+---------------------+");
+        System.out.println("|     DEL. ARTIGOS    |");
+        System.out.println("+---------------------+");
+
+        System.out.println("Insira o ID do artigo ");
+        System.out.print("que será deletado: ");
+
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        ArtigoDAO artigoDAO = new ArtigoDAO();
+        artigoDAO.deletarArtigo(id);
+        System.out.println("Artigo deletado com sucesso.");
+        telaAdmin(usuario);
+
+    }
+
+    public static void telaEditarArtigo(Usuario usuario){
+        System.out.println("+---------------------+");
+        System.out.println("|     EDT. ARTIGOS    |");
+        System.out.println("+---------------------+");
+
+        System.out.println("Insira o ID do artigo ");
+        System.out.print("que será editado: ");
+
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("Escreva o novo WikiTexto ");
+        System.out.print("que deste artigo: ");
+
+        String wikiTexto = scanner.next();
+        scanner.nextLine();
+
+        ArtigoDAO artigoDAO = new ArtigoDAO();
+        artigoDAO.editarArtigo(id,wikiTexto);
+        System.out.println("Artigo editado com sucesso.");
+        telaBuscarArtigo(usuario);
     }
 
 }
