@@ -1,5 +1,6 @@
 package dao;
 
+import entity.Artigo;
 import entity.Categoria;
 
 import java.sql.*;
@@ -51,6 +52,30 @@ public class CategoriaDAO extends BaseDAO {
 
         return listaCategorias;
 
+    }
+
+    public boolean buscarPorId(int id){
+
+        String qry = "SELECT cat.id_categoria " +
+                "FROM categoria cat where cat.id_categoria = ?";
+
+        try (Connection conn = conn();
+             PreparedStatement pre = conn().prepareStatement(qry)) {
+
+            pre.setInt(1, id);
+
+            ResultSet resultadoQry = pre.executeQuery();
+
+            if(resultadoQry.next()) {
+                return true;
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao exibir artigo: " + e.getMessage());
+        }
+
+        return false;
     }
 
 }

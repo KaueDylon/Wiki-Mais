@@ -33,8 +33,13 @@ public class Main {
         System.out.println("| 3) Sair             |");
         System.out.println("+---------------------+");
 
+
+        while (!scanner.hasNextInt()) {
+            System.out.println("Insira um valor numérico ");
+            System.out.println("correspondente às opções.");
+            scanner.next();
+        }
         int opcao = scanner.nextInt();
-        scanner.nextLine();
 
         switch (opcao) {
             case 1:
@@ -46,6 +51,10 @@ public class Main {
                 break;
             case 3:
                 telaSair();
+            default:
+                System.out.println("Insira uma opção válida. ");
+                System.out.println("Tente novamente.");
+                telaIniciar();
         }
     }
 
@@ -71,6 +80,7 @@ public class Main {
         System.out.println("+---------------------+");
         System.out.println("|        ENTRAR       |");
         System.out.println("+---------------------+");
+        scanner.nextLine();
         System.out.print("Nome do usuário: ");
         String nomeUsuario = scanner.nextLine();
         System.out.print("Senha do usuário: ");
@@ -116,6 +126,12 @@ public class Main {
         }
         System.out.println("+---------------------+");
 
+        while (!scanner.hasNextInt()) {
+            System.out.println("Insira um valor numérico ");
+            System.out.println("correspondente às opções.");
+            scanner.next();
+        }
+
         int opcao = scanner.nextInt();
         scanner.nextLine();
 
@@ -137,7 +153,8 @@ public class Main {
                 telaAdmin(usuario);
                 break;
             default:
-                System.out.println("Opção inválida. Tente novamente.");
+                System.out.println("Insira uma opção válida. ");
+                System.out.println("Tente novamente.");
                 telaOpcaoArtigos(usuario);
                 break;
         }
@@ -159,10 +176,23 @@ public class Main {
         }
 
         System.out.println("Digite o ID do artigo que deseja:");
+
+        while (!scanner.hasNextInt()) {
+            System.out.println("Insira um valor numérico ");
+            System.out.println("correspondente às opções.");
+            scanner.next();
+        }
         int opcao = scanner.nextInt();
         scanner.nextLine();
 
         Artigo artigo = artigoDAO.listarArtigoID(opcao);
+
+        if (artigo == null) {
+            System.out.println("O artigo não existe.");
+            telaBuscarArtigo(usuario);
+            return;
+        }
+
         System.out.println("");
         System.out.println("Artigo: " + artigo.getNome());
         System.out.println(artigo.getWikitexto());
@@ -170,9 +200,18 @@ public class Main {
 
         System.out.println("Você deseja:");
         System.out.println("=== (1) INICIO - (2) ARTIGOS ===");
-        System.out.println(" === (QUALQUER TECLA) SAIR ===");
+        System.out.println(" === (QUALQUER NUM.) SAIR ===");
+
+
+        while (!scanner.hasNextInt()) {
+            System.out.println("Insira um valor numérico ");
+            System.out.println("correspondente às opções.");
+            scanner.next();
+        }
+
         opcao = scanner.nextInt();
         scanner.nextLine();
+
         if (opcao == 1) {
             telaOpcaoArtigos(usuario);
         } else if (opcao == 2) {
@@ -190,8 +229,20 @@ public class Main {
 
         System.out.print("Nome do Artigo: ");
         String nomeArtigo = scanner.nextLine();
+
+        if (nomeArtigo.isEmpty()) {
+            System.out.println("O nome do artigo não pode ser vazia.");
+            telaCriarArtigo(usuario);
+        }
+
         System.out.println("Deseja criar uma categoria?");
         System.out.println("=== (1) SIM - (2) NÃO ===");
+
+        while (!scanner.hasNextInt()) {
+            System.out.println("Insira um valor numérico ");
+            System.out.println("correspondente às opções.");
+            scanner.next();
+        }
         int opcao = scanner.nextInt();
         scanner.nextLine();
         if (opcao == 1) {
@@ -206,15 +257,36 @@ public class Main {
                 System.out.println(categ.getId() + ") " + categ.getNome());
             }
 
-            opcao = scanner.nextInt();
+
+            while (true) {
+                while (!scanner.hasNextInt()) {
+                    System.out.println("Insira um valor numérico ");
+                    System.out.println("correspondente às opções.");
+                    scanner.next();
+                }
+
+                int idCategoria = scanner.nextInt();
+                scanner.nextLine();
+
+                if (categoriaDAO.buscarPorId(idCategoria)) {
+                    break;
+                } else {
+                    System.out.println("Categoria não encontrada.");
+                    System.out.println("tente novamente.");
+                }
+
+            }
+
 
             System.out.println("Insira o 'WikiTexto':");
-            String wikiTexto = scanner.next();
-            scanner.nextLine();
+
+            String wikiTexto = scanner.nextLine();
 
             Artigo artigo = new Artigo(nomeArtigo, wikiTexto);
             ArtigoDAO artigoDAO = new ArtigoDAO();
             artigoDAO.cadastrarArtigo(opcao, artigo, usuario);
+
+            telaBuscarArtigo(usuario);
 
         } else {
             System.out.println("Opção inválida. Tente novamente.");
@@ -230,6 +302,11 @@ public class Main {
 
         System.out.print("Nome da Categoria: ");
         String nomeCategoria = scanner.nextLine();
+
+        if (nomeCategoria.isEmpty()) {
+            System.out.println("O nome da categoria não pode ser vazia.");
+            telaCriarCategoria(usuario);
+        }
 
         CategoriaDAO categoriaDAO = new CategoriaDAO();
         Categoria categoria = new Categoria(nomeCategoria);
@@ -252,6 +329,12 @@ public class Main {
         System.out.println("|    um usuário       |");
         System.out.println("| 3) Sair             |");
         System.out.println("+---------------------+");
+
+        while (!scanner.hasNextInt()) {
+            System.out.println("Insira um valor numérico ");
+            System.out.println("correspondente às opções.");
+            scanner.next();
+        }
 
         int opcao = scanner.nextInt();
         scanner.nextLine();
@@ -332,7 +415,7 @@ public class Main {
 
     }
 
-    public static void telaEditarArtigo(Usuario usuario){
+    public static void telaEditarArtigo(Usuario usuario) {
         System.out.println("+---------------------+");
         System.out.println("|     EDT. ARTIGOS    |");
         System.out.println("+---------------------+");
@@ -350,7 +433,7 @@ public class Main {
         scanner.nextLine();
 
         ArtigoDAO artigoDAO = new ArtigoDAO();
-        artigoDAO.editarArtigo(id,wikiTexto);
+        artigoDAO.editarArtigo(id, wikiTexto);
         System.out.println("Artigo editado com sucesso.");
         telaBuscarArtigo(usuario);
     }

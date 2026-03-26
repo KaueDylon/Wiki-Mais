@@ -26,15 +26,15 @@ public class ArtigoDAO extends BaseDAO {
             pre.setInt(1, categoria);
             pre.setInt(2, usuario.getId());
 
-            if (artigo.getNome().isEmpty()) {
-                throw new IllegalArgumentException("O nome do artigo não pode ser vazio.");
-            }
-
+//            if (artigo.getNome().isEmpty()) {
+//                throw new IllegalArgumentException("O nome do artigo não pode ser vazio.");
+//            }
+//
             pre.setString(3, artigo.getNome());
-
-            if (artigo.getWikitexto().isEmpty()) {
-                throw new IllegalArgumentException("O Wikitexto não pode ser vazio.");
-            }
+//
+//            if (artigo.getWikitexto().isEmpty()) {
+//                throw new IllegalArgumentException("O Wikitexto não pode ser vazio.");
+//            }
 
             pre.setString(4, artigo.getWikitexto());
 
