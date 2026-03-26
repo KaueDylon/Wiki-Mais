@@ -62,6 +62,7 @@ public class Main {
         System.out.println("+---------------------+");
         System.out.println("|      NOVA CONTA     |");
         System.out.println("+---------------------+");
+        scanner.nextLine();
         System.out.print("Nome do usuário: ");
         String nomeUsuario = scanner.nextLine();
         System.out.print("Senha do usuário: ");
