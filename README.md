@@ -1,5 +1,5 @@
 
-# 📌 Wiki-Mais (W.I.P)
+# 📌 Wiki-Mais
 
 > Gerenciamento e criação de **Wikis**.
 
@@ -62,8 +62,6 @@ create table artigo(
 insert into cargo (nome_cargo) values ('ADMIN'),('MEMBRO'),('BANIDO');
 
 ```
-
-#### Projeto ainda em desenvolvimento / W.I.P
 
 
 
